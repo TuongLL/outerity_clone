@@ -4,11 +4,11 @@ import Breadcrumb from './Breadcrumb'
 import { Box } from '@mui/material'
 import Content from './Content'
 
-function Layout() {
+function Layout({productCatalogType}) {
   return (
-    <Box>
+    <Box >
         <Header />
-        <Breadcrumb />
+        <Breadcrumb productCatalogType={productCatalogType}/>
         <Content /> 
     </Box>
   )
