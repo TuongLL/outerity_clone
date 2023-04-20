@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import React from "react";
 
-function ProductCard({ discount }) {
+function ProductCard({ name, current_price, origin_price, image, discount }) {
+    console.log(image)
   return (
     <Card
       sx={{
@@ -26,12 +27,7 @@ function ProductCard({ discount }) {
         },
       }}
     >
-      <CardMedia
-        component="img"
-        alt="green iguana"
-        height="100%"
-        src="https://product.hstatic.net/200000312481/product/1_f5c33d47cc1444899e9beda476ce76c7_grande.jpg"
-      />
+      <CardMedia component="img" alt="green iguana" height="100%" src={image} />
       <CardContent
         sx={{
           padding: "12px 0",
@@ -46,7 +42,7 @@ function ProductCard({ discount }) {
           component="div"
           noWrap={true}
         >
-          ACUTE COLOR TEE / WHITE COLOR
+          {name}
         </Typography>
         <Box
           sx={{
@@ -67,7 +63,7 @@ function ProductCard({ discount }) {
               },
             }}
           >
-            188,000
+            {current_price}
           </Typography>
           <Typography
             sx={{
@@ -84,7 +80,7 @@ function ProductCard({ discount }) {
               },
             }}
           >
-            230,000
+            {origin_price}
           </Typography>
         </Box>
       </CardContent>
