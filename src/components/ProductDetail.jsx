@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   IconButton,
+  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -77,6 +78,17 @@ function ProductDetail() {
     </Box>
   );
 }
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const ProductDetailInfo = ({
   name,
@@ -88,6 +100,10 @@ const ProductDetailInfo = ({
   const sizes = ["S", "M", "L"];
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <Box>
       <Typography
@@ -201,7 +217,11 @@ const ProductDetailInfo = ({
           padding: "15px 0",
         }}
       >
-        <IconButton onClick={() => setQuantity(quantity> 1 &&  quantity - 1 || quantity)}>
+        <IconButton
+          onClick={() =>
+            setQuantity((quantity > 1 && quantity - 1) || quantity)
+          }
+        >
           <MinimizeIcon />
         </IconButton>
         <TextField
@@ -211,24 +231,49 @@ const ProductDetailInfo = ({
           }}
           sx={{
             width: "100px",
-            textAlign: 'center'
+            textAlign: "center",
           }}
           size="small"
-          defaultValue={quantity}
           value={quantity}
         />
         <IconButton onClick={() => setQuantity(quantity + 1)}>
           <AddIcon />
         </IconButton>
       </Box>
-      <Button variant="contained" fullWidth sx={{
-        padding: '10px 0'
-      }}>Mua hàng</Button>
-      <Typography sx={{
-        fontSize: '14px',
-        fontWeight: 'bold',
-        marginTop: '24px'
-      }}>Mô tả</Typography>
+      <Button
+        variant="contained"
+        fullWidth
+        sx={{
+          padding: "10px 0",
+        }}
+        onClick={handleOpen}
+      >
+        Mua hàng
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
+      <Typography
+        sx={{
+          fontSize: "14px",
+          fontWeight: "bold",
+          marginTop: "24px",
+        }}
+      >
+        Mô tả
+      </Typography>
       <Typography>{description}</Typography>
     </Box>
   );
