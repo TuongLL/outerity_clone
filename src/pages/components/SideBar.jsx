@@ -1,5 +1,6 @@
 import { TreeItem, TreeView } from "@mui/lab";
 import { Box } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 
 const treeMenu = [
@@ -20,40 +21,156 @@ const treeMenu = [
 function SideBar() {
   return (
     <Box>
-      <TreeView sx={{
-            textTransform: 'uppercase',
-        }}>
-        <TreeItem label="tops" nodeId="1" sx={{
-            fontSize: '14px'
-        }}>
-          <TreeItem label="polo" nodeId="2" sx={{
-            color: '#666',
-            fontSize: '12px'
-          }}/>
-          <TreeItem label="croptop" nodeId="3"  sx={{
-            color: '#666',
-            fontSize: '12px'
-          }} />
-          <TreeItem  label="hoodie & sweater" nodeId="4"  sx={{
-            color: '#666',
-            fontSize: '12px!important'
-          }}/>
+      <TreeView
+        sx={{
+          textTransform: "uppercase",
+        }}
+      >
+        <TreeItem
+          label="tops"
+          nodeId="1"
+          sx={{
+            fontSize: "14px",
+          }}
+        >
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./tee"
+              >
+                tee
+              </Link>
+            }
+            nodeId="2"
+            sx={{
+              color: "#666",
+              fontSize: "12px",
+            }}
+          />
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./polo"
+              >
+                Polo
+              </Link>
+            }
+            nodeId="3"
+            sx={{
+              color: "#666",
+              fontSize: "12px",
+            }}
+          />
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./croptop"
+              >
+                croptop
+              </Link>
+            }
+            nodeId="4"
+            sx={{
+              color: "#666",
+              fontSize: "12px",
+            }}
+          />
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./phoodie-sweater"
+              >
+                hoodie & sweater
+              </Link>
+            }
+            nodeId="5"
+            sx={{
+              color: "#666",
+              fontSize: "12px!important",
+            }}
+          />
         </TreeItem>
-        <TreeItem label="bottom" nodeId="5" sx={{
-            fontSize: '14px'
-        }}>
-          <TreeItem label="short" nodeId="6" sx={{
-            color: '#666',
-            fontSize: '12px'
-          }}/>
+        <TreeItem
+          label="bottom"
+          nodeId="6"
+          sx={{
+            fontSize: "14px",
+          }}
+        >
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./short"
+              >
+                short
+              </Link>
+            }
+            nodeId="7"
+            sx={{
+              color: "#666",
+              fontSize: "12px",
+              textDecoration: "none",
+              color: "#666",
+            }}
+          />
         </TreeItem>
-        <TreeItem label="accessories" nodeId="7" sx={{
-            fontSize: '14px'
-        }}>
-          <TreeItem label="tote bag" nodeId="8" sx={{
-            color: '#666',
-            fontSize: '12px'
-          }}/>
+        <TreeItem
+          label="accessories"
+          nodeId="8"
+          sx={{
+            fontSize: "14px",
+          }}
+        >
+          <TreeItem
+            label={
+              <Link
+                style={{
+                  width: "100%",
+                  display: "block",
+                  textDecoration: "none",
+                  color: "#666",
+                }}
+                href="./tote-bag"
+              >
+                tote bag
+              </Link>
+            }
+            nodeId="9"
+            sx={{
+              color: "#666",
+              fontSize: "12px",
+            }}
+          />
         </TreeItem>
         {/* <TreeItem nodeId="1" label="Applications">
           <TreeItem nodeId="2" label="Calendar" />
