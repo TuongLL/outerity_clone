@@ -20,7 +20,11 @@ const treeMenu = [
 
 function SideBar() {
   return (
-    <Box>
+    <Box
+      sx={{
+        flex: "2",
+      }}
+    >
       <TreeView
         sx={{
           textTransform: "uppercase",
