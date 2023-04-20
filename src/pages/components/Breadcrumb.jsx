@@ -35,7 +35,7 @@ function Breadcrumb({ productCatalogType }) {
           >
             Trang chủ
           </Link>
-          {pathName.map((path) => (
+          {pathName.map((path,index) => (
             <Link
               underline="hover"
               color="inherit"
@@ -45,6 +45,7 @@ function Breadcrumb({ productCatalogType }) {
                 fontSize: "13px",
                 color: "black",
               }}
+              key={index}
             >
               {path}
             </Link>

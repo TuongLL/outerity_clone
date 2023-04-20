@@ -43,6 +43,7 @@ function Header() {
           src="https://file.hstatic.net/200000312481/file/newlogoort_5ffe29c58c414ccebc2120bed119c8c0.png"
           width={200}
           height={40}
+          alt= "Alt Image"
         />
       </Box>
       <Grid
@@ -50,9 +51,9 @@ function Header() {
         spacing={{ xs: 4, md: 6 }}
         columns={{ xs: 0, sm: 0, md: 9 }}
       >
-        {headerHero.map((item) => (
+        {headerHero.map((item,index) => (
           <Grid
-            key={item}
+            key={index}
             item
             sx={{
               display: "flex",
@@ -65,7 +66,7 @@ function Header() {
             sm={4}
             md={3}
           >
-            <Image src={item.iconImg} width={25} height={25} />
+            <Image src={item.iconImg} width={25} height={25} alt="Alt image"/>
             <Box>
               <Typography
                 sx={{

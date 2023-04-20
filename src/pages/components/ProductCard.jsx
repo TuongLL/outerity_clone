@@ -7,14 +7,26 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import React from "react";
 
-function ProductCard({ name, current_price, origin_price, image, discount }) {
-    console.log(image)
+function ProductCard({
+  path,
+  name,
+  current_price,
+  origin_price,
+  image,
+  discount,
+}) {
+  const router = useRouter();
+  const handleCardClick = async () => {
+    router.push(`../products/${path}`);
+  };
   return (
     <Card
       sx={{
         boxShadow: "none",
+        cursor: "pointer",
         "&::before": {
           content: discount && `"${discount}"`,
           position: "absolute",
@@ -26,6 +38,7 @@ function ProductCard({ name, current_price, origin_price, image, discount }) {
           margin: "12px",
         },
       }}
+      onClick={handleCardClick}
     >
       <CardMedia component="img" alt="green iguana" height="100%" src={image} />
       <CardContent
