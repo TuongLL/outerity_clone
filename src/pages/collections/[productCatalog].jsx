@@ -9,7 +9,7 @@ export default function productCatalog() {
   const productCatalogType = router.query.productCatalog;
   return (
     <>
-      <Breadcrumb productCatalogType={productCatalogType} />
+      <Breadcrumb pathType={productCatalogType} />
       <Content />
     </>
   );
