@@ -10,7 +10,7 @@ function Content({products}) {
         padding: '20px 40px',
         gap: '50px'
     }}>
-        <SideBar />
+        {/* <SideBar /> */}
         <ProductList products={products}/>
     </Box>
   )

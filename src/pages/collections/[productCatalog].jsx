@@ -32,7 +32,6 @@ export async function getServerSideProps(context) {
     "tote-bag",
   ];
   if (indexOf(defaultCatalog, productCatalog) == -1) {
-    console.log(productCatalog)
     return {
       redirect: {
         permanent: false,
