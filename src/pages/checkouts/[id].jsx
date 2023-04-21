@@ -24,7 +24,7 @@ export default function Checkout() {
   };
   const validatePhone = () => {
     const regex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
-    console.log(regex.test(phone))
+    console.log(regex.test(phone));
     setPhoneValidated(!regex.test(phone));
   };
   const router = useRouter();
@@ -37,11 +37,10 @@ export default function Checkout() {
       }}
       component="form"
       onSubmit={(e) => {
-        e.preventDefault()
-        validateEmail()
-        validatePhone()
+        e.preventDefault();
+        validateEmail();
+        validatePhone();
       }}
-      
     >
       <Box
         flex={1}
@@ -61,7 +60,6 @@ export default function Checkout() {
           Outerity
         </Typography>
         <TextField
-          
           fullWidth
           id="outlined-basic"
           label="Họ và tên"
@@ -86,7 +84,9 @@ export default function Checkout() {
           <TextField
             fullWidth
             error={phoneValidated}
-            helperText={phoneValidated && "Incorrect entry. Example: 123-456-7890"}
+            helperText={
+              phoneValidated && "Incorrect entry. Example: 123-456-7890"
+            }
             id="outlined-basic"
             label="Số điện thoại"
             variant="outlined"

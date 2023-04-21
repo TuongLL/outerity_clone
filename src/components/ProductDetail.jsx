@@ -11,6 +11,8 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 import AddIcon from "@mui/icons-material/Add";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/router";
 const sideImgs = [
   "https://product.hstatic.net/200000312481/product/2_455d9e3b637c4c7bb8e54e816d3fe812_master.jpg",
   "https://product.hstatic.net/200000312481/product/ato1021_1_25ab666b4c6241f7ac7f8cb889e334ac_master.jpg",
@@ -19,10 +21,8 @@ const sideImgs = [
   "https://product.hstatic.net/200000312481/product/ato1021_4_669b4be8f6394e359573f09b61dcbcc0_master.jpg",
 ];
 
-function ProductDetail({productDetail}) {
-  
+function ProductDetail({ productDetail }) {
   const [heroImg, setHeroImg] = useState(productDetail.thumbnail);
-  
 
   return (
     <Box
@@ -76,22 +76,12 @@ function ProductDetail({productDetail}) {
           price={productDetail.price}
           currentprice={productDetail.currentprice}
           description={productDetail.description}
+          id={productDetail.id}
         />
       </Box>
     </Box>
   );
 }
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const ProductDetailInfo = ({
   name,
@@ -99,14 +89,25 @@ const ProductDetailInfo = ({
   currentprice,
   price,
   description,
+  id,
 }) => {
+  const router = useRouter()
   const sizes = ["S", "M", "L"];
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleBuy = async () => {
+    const body = {
+      quantity,
+      size: selectedSize,
+      productid: id,
+    };
+    const {data} = await supabase.from("checkoutorders").insert(body).select();
+    router.push(`../checkouts/${data[0].id}`)
+    
+  };
   return (
     <Box>
       <Typography
@@ -249,25 +250,10 @@ const ProductDetailInfo = ({
         sx={{
           padding: "10px 0",
         }}
-        onClick={handleOpen}
+        onClick={handleBuy}
       >
         Mua hàng
       </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
       <Typography
         sx={{
           fontSize: "14px",
