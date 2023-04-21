@@ -1,25 +1,18 @@
+import { supabase } from "@/lib/supabaseClient";
+import AddIcon from "@mui/icons-material/Add";
+import MinimizeIcon from "@mui/icons-material/Minimize";
 import {
   Box,
   Button,
   Divider,
   IconButton,
-  Modal,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import MinimizeIcon from "@mui/icons-material/Minimize";
-import AddIcon from "@mui/icons-material/Add";
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
-const sideImgs = [
-  "https://product.hstatic.net/200000312481/product/2_455d9e3b637c4c7bb8e54e816d3fe812_master.jpg",
-  "https://product.hstatic.net/200000312481/product/ato1021_1_25ab666b4c6241f7ac7f8cb889e334ac_master.jpg",
-  "https://product.hstatic.net/200000312481/product/ato1021_2_942b09fb670d46e5beb997c6700407f2_master.jpg",
-  "https://product.hstatic.net/200000312481/product/ato1021_3_9a64751fa5954649ae2e6ba0fa879ba8_master.jpg",
-  "https://product.hstatic.net/200000312481/product/ato1021_4_669b4be8f6394e359573f09b61dcbcc0_master.jpg",
-];
+import React, { useState } from "react";
+
 
 function ProductDetail({ productDetail }) {
   const [heroImg, setHeroImg] = useState(productDetail.thumbnail);

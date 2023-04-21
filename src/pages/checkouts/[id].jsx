@@ -1,3 +1,4 @@
+import { supabase } from "@/lib/supabaseClient";
 import {
   Box,
   Button,
@@ -7,28 +8,44 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function Checkout() {
-  const [name, setName] = useState("");
+export default function Checkout({ checkoutOrder }) {
+  const [buyerName, setBuyerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  const [phoneValidated, setPhoneValidated] = useState(false);
-  const [emailValidated, setEmailValidated] = useState(false);
+  const [phoneValidated, setPhoneValidated] = useState(true);
+  const [emailValidated, setEmailValidated] = useState(true);
   const validateEmail = () => {
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    setEmailValidated(!regex.test(email));
+    setEmailValidated(regex.test(email));
   };
   const validatePhone = () => {
-    const regex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
-    console.log(regex.test(phone));
-    setPhoneValidated(!regex.test(phone));
+    const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+    setPhoneValidated(regex.test(phone));
   };
-  const router = useRouter();
-  const orderId = router.query.id;
+  const { quantity, size, products } = checkoutOrder;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    validateEmail();
+    validatePhone();
+    console.log(phoneValidated, emailValidated)
+    if (phoneValidated && emailValidated) {
+      const body = {
+        checkoutorderid: checkoutOrder.id,
+        username: buyerName,
+        email,
+        phone,
+        address,
+        totalmoney: products.currentprice * quantity,
+      };
+      await supabase.from("orders").insert(body);
+    }
+  };
+
   return (
     <Box
       display={"flex"}
@@ -36,11 +53,7 @@ export default function Checkout() {
         minHeight: "calc(100vh - 100px)",
       }}
       component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        validateEmail();
-        validatePhone();
-      }}
+      onSubmit={handleSubmit}
     >
       <Box
         flex={1}
@@ -64,7 +77,7 @@ export default function Checkout() {
           id="outlined-basic"
           label="Họ và tên"
           variant="outlined"
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setBuyerName(e.target.value)}
         />
         <Box
           display={"flex"}
@@ -74,8 +87,8 @@ export default function Checkout() {
         >
           <TextField
             fullWidth
-            error={emailValidated}
-            helperText={emailValidated && "Incorrect entry."}
+            error={!emailValidated}
+            helperText={!emailValidated && "Incorrect entry."}
             id="outlined-basic"
             label="Email"
             variant="outlined"
@@ -83,9 +96,9 @@ export default function Checkout() {
           />
           <TextField
             fullWidth
-            error={phoneValidated}
+            error={!phoneValidated}
             helperText={
-              phoneValidated && "Incorrect entry. Example: 123-456-7890"
+              !phoneValidated && "Incorrect entry. Example: 123-456-7890"
             }
             id="outlined-basic"
             label="Số điện thoại"
@@ -142,15 +155,17 @@ export default function Checkout() {
               <Card>
                 <CardMedia
                   component="img"
-                  src="https://product.hstatic.net/200000312481/product/ato1021_1_25ab666b4c6241f7ac7f8cb889e334ac_master.jpg"
+                  src={products.thumbnail}
                   alt="Alt image"
                   height="100px"
                 />
               </Card>
             </Box>
-            <Typography>
-              Outerity Double Tee Collection - DJ Bear / Dark Slate
-            </Typography>
+            <Box>
+              <Typography>{products.name}</Typography>
+              <Typography>Size: {size}</Typography>
+              <Typography>Quantity: {quantity}</Typography>
+            </Box>
           </Box>
           <Box flex={3} width="100%" display="flex">
             <Typography
@@ -167,7 +182,7 @@ export default function Checkout() {
                 },
               }}
             >
-              9,500,000
+              {products.currentprice * quantity}
             </Typography>
           </Box>
         </Box>
@@ -201,7 +216,7 @@ export default function Checkout() {
                 },
               }}
             >
-              9,500,000
+              {products.currentprice * quantity}
             </Typography>
           </Box>
           <Box display={"flex"} justifyContent={"space-between"}>
@@ -236,10 +251,22 @@ export default function Checkout() {
               },
             }}
           >
-            9,500,000
+            {products.currentprice * quantity}
           </Typography>
         </Box>
       </Box>
     </Box>
   );
+}
+
+export async function getServerSideProps(context) {
+  const checkoutOrderId = context.params.id;
+  const { data } = await supabase
+    .from("checkoutorders")
+    .select(`*, products(thumbnail, name, currentprice)`)
+    .eq("id", checkoutOrderId);
+  console.log(data);
+  return {
+    props: { checkoutOrder: data[0] },
+  };
 }
