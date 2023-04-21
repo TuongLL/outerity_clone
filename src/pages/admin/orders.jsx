@@ -44,11 +44,13 @@ export default function orders({ orders }) {
                 >
                   <TableCell component="th" scope="row">
                     <Box>
-                      <Image
+                      <img
                         src={order.checkoutorders.products.thumbnail}
                         width={50}
                         height={50}
                         alt="alt img"
+                        blurDataURL="URL"
+                        placeholder="blur"
                       />
                     </Box>
                   </TableCell>

@@ -27,7 +27,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { isEmpty } from "lodash";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { toast } from "react-toastify";
@@ -119,10 +118,12 @@ function Row(props) {
                       <TableRow key={product.id}>
                         <TableCell component="th" scope="row" width={50}>
                           <Box>
-                            <Image
+                            <img
                               src={product.thumbnail}
                               width={50}
                               height={50}
+                              blurDataURL="URL"
+                              placeholder="blur"
                             />
                           </Box>
                         </TableCell>

@@ -129,7 +129,7 @@ export default function Checkout({ checkoutOrder }) {
             fullWidth
             error={!phoneValidated}
             helperText={
-              !phoneValidated && "Incorrect entry. Example: 123-456-7890"
+              !phoneValidated && "Incorrect entry. Example: 035-1111-222"
             }
             id="outlined-basic"
             label="Số điện thoại"

@@ -1,9 +1,7 @@
-import { Box, Grid, Typography } from "@mui/material";
-import Image from "next/image";
-import React from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import { Box, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 
 const headerHero = [
@@ -39,11 +37,13 @@ function Header() {
       }}
     >
       <Box>
-        <Image
+        <img
           src="https://file.hstatic.net/200000312481/file/newlogoort_5ffe29c58c414ccebc2120bed119c8c0.png"
           width={200}
           height={40}
-          alt= "Alt Image"
+          alt="Alt Image"
+          blurDataURL="URL"
+          placeholder="blur"
         />
       </Box>
       <Grid
@@ -51,7 +51,7 @@ function Header() {
         spacing={{ xs: 4, md: 6 }}
         columns={{ xs: 0, sm: 0, md: 9 }}
       >
-        {headerHero.map((item,index) => (
+        {headerHero.map((item, index) => (
           <Grid
             key={index}
             item
@@ -59,14 +59,20 @@ function Header() {
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              display: { sm: "none", lg: "flex",
-              xs: "none"},
+              display: { sm: "none", lg: "flex", xs: "none" },
             }}
             xs={4}
             sm={4}
             md={3}
           >
-            <Image src={item.iconImg} width={25} height={25} alt="Alt image"/>
+            <img
+              src={item.iconImg}
+              width={25}
+              height={25}
+              alt="Alt image"
+              blurDataURL="URL"
+              placeholder="blur"
+            />
             <Box>
               <Typography
                 sx={{
@@ -94,7 +100,7 @@ function Header() {
         sx={{
           alignItems: "center",
           gap: "12px",
-          minWidth: '200px'
+          minWidth: "200px",
         }}
       >
         <AccountCircleIcon
@@ -106,7 +112,6 @@ function Header() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            
           }}
         >
           <Box
@@ -159,7 +164,7 @@ function Header() {
           display: "flex",
           alignItems: "center",
           gap: "12px",
-          minWidth: '100px'
+          minWidth: "100px",
         }}
       >
         <LocalMallIcon

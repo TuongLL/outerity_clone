@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import LoadingComp from "./LoadingComp";
@@ -44,18 +43,27 @@ function ProductDetail({ productDetail }) {
                 height: "80px",
               }}
             >
-              <Image
+              <img
                 onClick={() => setHeroImg(subImage)}
                 alt="Alt image"
                 src={subImage}
                 width={80}
                 height={80}
+                blurDataURL="URL"
+                placeholder="blur"
               />
             </Box>
           ))}
         </Box>
         <Box>
-          <Image alt="Alt image" src={heroImg} width={700} height={700} />
+          <img
+            alt="Alt image"
+            src={heroImg}
+            width={700}
+            height={700}
+            blurDataURL="URL"
+            placeholder="blur"
+          />
         </Box>
       </Box>
       <Box
