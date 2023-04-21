@@ -17,14 +17,18 @@ import Image from "next/image";
 import {
   Button,
   FormControl,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Modal,
+  OutlinedInput,
   Select,
   TextField,
 } from "@mui/material";
 import DropZone from "@/components/DropZone";
 import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { isEmpty } from "lodash";
 
 function createData(props) {
   return {
@@ -224,20 +228,57 @@ export default function CollapsibleTable() {
 function CreateProduct() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setType("tee");
+    setProductName("");
+    setDescription("");
+    setPrice(0);
+    setDiscount(0);
+    setThumbnail([]);
+    setSubImage([]);
+    setOpen(false);
+  };
 
-  const [type, setType] = React.useState("");
+  const [type, setType] = React.useState("tee");
+  const [productName, setProductName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [price, setPrice] = React.useState(0);
+  const [discount, setDiscount] = React.useState(0);
   const [thumbnail, setThumbnail] = React.useState([]);
   const [subImage, setSubImage] = React.useState([]);
 
-  const handleSave = () => {
-    console.log(thumbnail, subImage)
-  }
-
-
-  const handleChange = (event) => {
-    setType(event.target.value);
+  const fillFullInfo = () => {
+    if (
+      type &&
+      productName &&
+      description &&
+      price &&
+      !isEmpty(thumbnail) &&
+      !isEmpty(subImage)
+    )
+      return true;
+    return false;
   };
+
+  const handleSave = async () => {
+    console.log("Saved");
+    const fileName = thumbnail[0].name;
+    const filePath = `images/${fileName}`;
+
+    console.log(type, productName, description, price, discount);
+    const { data, error } = await supabase.storage
+      .from("outerity_store_image")
+      .upload(filePath, thumbnail[0]);
+
+    if (error) {
+      console.error(error);
+    } else {
+      const { data: getPublicUrl } = await supabase.storage
+        .from("outerity_store_image")
+        .getPublicUrl(filePath);
+    }
+  };
+
   return (
     <>
       <Button onClick={handleOpen}>Thêm sản phẩm</Button>
@@ -263,13 +304,27 @@ function CreateProduct() {
               id="demo-simple-select"
               value={type}
               label="Type"
-              onChange={handleChange}
+              onChange={(event) => setType(event.target.value)}
             >
+              <MenuItem value={"tee"}>Tee</MenuItem>
               <MenuItem value={"polo"}>Polo</MenuItem>
+              <MenuItem value={"croptop"}>Croptop</MenuItem>
+              <MenuItem value={"hoodie-sweater"}>Hoodie-sweater</MenuItem>
+              <MenuItem value={"short"}>Short</MenuItem>
+              <MenuItem value={"tote-bag"}>Tote bag</MenuItem>
             </Select>
           </FormControl>
-          <TextField required id="outlined-required" label="Tên sản phẩm" />
-          <TextField id="outlined-required" label="Mô tả" />
+          <TextField
+            onChange={(e) => setProductName(e.target.value)}
+            required
+            id="outlined-required"
+            label="Tên sản phẩm"
+          />
+          <TextField
+            id="outlined-required"
+            label="Mô tả"
+            onChange={(e) => setDescription(e.target.value)}
+          />
           <Box
             sx={{
               display: "flex",
@@ -277,18 +332,41 @@ function CreateProduct() {
             }}
           >
             <TextField
-              id="outlined-required"
               label="Giá bán"
-              defaultValue="100000"
+              id="outlined-start-adornment"
+              // sx={{ m: 1, width: "25ch" }}
+              onChange={(e) => setPrice(e.target.value)}
+              value={price}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">VNĐ</InputAdornment>
+                ),
+              }}
             />
             <TextField
-              id="outlined-required"
               label="Discount"
-              defaultValue="50%"
+              id="outlined-start-adornment"
+              // sx={{ m: 1, width: "25ch" }}
+              value={discount}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">%</InputAdornment>
+                ),
+              }}
+              onChange={(e) => setDiscount(e.target.value)}
             />
           </Box>
           <Box>
-            <Typography>Thumbnail</Typography>
+            <Typography
+              sx={{
+                "&::after": {
+                  content: `'*'`,
+                  color: "red",
+                },
+              }}
+            >
+              Thumbnail
+            </Typography>
             <Box
               sx={{
                 background: "#fafafa",
@@ -298,11 +376,25 @@ function CreateProduct() {
                 border: "1px dotted #bdbdbd",
               }}
             >
-              <DropZone files={thumbnail} setFiles={setThumbnail} maxFiles={1} title="Drag 'n' drop one image file here, or click to select files"/>
+              <DropZone
+                files={thumbnail}
+                setFiles={setThumbnail}
+                maxFiles={1}
+                title="Drag 'n' drop one image file here, or click to select files"
+              />
             </Box>
           </Box>
           <Box>
-            <Typography>Sub Images</Typography>
+            <Typography
+              sx={{
+                "&::after": {
+                  content: `'*'`,
+                  color: "red",
+                },
+              }}
+            >
+              Sub Images
+            </Typography>
             <Box
               sx={{
                 background: "#fafafa",
@@ -312,10 +404,20 @@ function CreateProduct() {
                 border: "1px dotted #bdbdbd",
               }}
             >
-              <DropZone files={subImage} setFiles={setSubImage} maxFiles={4} title="Drag 'n' drop 4 image files here, or click to select files"/>
+              <DropZone
+                files={subImage}
+                setFiles={setSubImage}
+                maxFiles={4}
+                title="Drag 'n' drop 4 image files here, or click to select files"
+              />
             </Box>
           </Box>
-        <Button variant='contained' onClick={handleSave}>Save</Button>
+          <Button
+            variant="contained"
+            onClick={() => fillFullInfo() && handleSave()}
+          >
+            Save
+          </Button>
         </Box>
       </Modal>
     </>
