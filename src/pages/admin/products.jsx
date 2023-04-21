@@ -30,6 +30,8 @@ import { isEmpty } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Row(props) {
   const { collection } = props;
@@ -234,7 +236,6 @@ function CreateProduct() {
   const [subImage, setSubImage] = React.useState([]);
 
   const fillFullInfo = () => {
-    console.log(type, productName, description, price, thumbnail, subImage)
     if (
       type &&
       productName != "" &&
@@ -242,56 +243,88 @@ function CreateProduct() {
       price != 0 &&
       !isEmpty(thumbnail) &&
       !isEmpty(subImage)
-    ){
+    ) {
       return true;
     }
     return false;
   };
 
   const handleSave = async () => {
-    const thumbnailFileName = uuidv4() + thumbnail[0].name;
-    console.log(thumbnail[0]);
-    const thumbnailFilePath = `images/${thumbnailFileName}`;
-    try {
-      setLoading(true);
-      const { data, error } = await supabase.storage
-        .from("outerity_store_image")
-        .upload(thumbnailFilePath, thumbnail[0]);
-      const publicThumbnailUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${thumbnailFileName}`;
+    if (fillFullInfo() == false) {
+      toast.warning("🦄 Hãy điền đầy đủ thông tin!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else {
+      const thumbnailFileName = uuidv4() + thumbnail[0].name;
+      const thumbnailFilePath = `images/${thumbnailFileName}`;
+      try {
+        setLoading(true);
+        const { data, error } = await supabase.storage
+          .from("outerity_store_image")
+          .upload(thumbnailFilePath, thumbnail[0]);
+        const publicThumbnailUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${thumbnailFileName}`;
 
-      const publicSubImageUrls = await Promise.all(
-        subImage.map(async (file) => {
-          const subImageName = uuidv4() + file.name ;
-          const subImagePath = `images/${subImageName}`;
-          const { data, error } = await supabase.storage
-            .from("outerity_store_image")
-            .upload(subImagePath, file);
-          const publicSubImageUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${subImageName}`;
-          return publicSubImageUrl;
-        })
-      );
+        const publicSubImageUrls = await Promise.all(
+          subImage.map(async (file) => {
+            const subImageName = uuidv4() + file.name;
+            const subImagePath = `images/${subImageName}`;
+            const { data, error } = await supabase.storage
+              .from("outerity_store_image")
+              .upload(subImagePath, file);
+            const publicSubImageUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${subImageName}`;
+            return publicSubImageUrl;
+          })
+        );
 
-      const body = {
-        name: productName,
-        description,
-        discount: discount,
-        price,
-        type,
-        thumbnail: publicThumbnailUrl,
-        subimages: {
-          sub_1: publicSubImageUrls[0],
-          sub_2: publicSubImageUrls[1],
-          sub_3: publicSubImageUrls[2],
-          sub_4: publicSubImageUrls[3],
-        },
-      };
+        const body = {
+          name: productName,
+          description,
+          discount: discount,
+          price,
+          type,
+          thumbnail: publicThumbnailUrl,
+          subimages: {
+            sub_1: publicSubImageUrls[0],
+            sub_2: publicSubImageUrls[1],
+            sub_3: publicSubImageUrls[2],
+            sub_4: publicSubImageUrls[3],
+          },
+        };
 
-      await supabase.from("products").insert(body);
-      setLoading(false);
-      handleClose();
-      router.push("/admin/products");
-    } catch (err) {
-      console.log(err);
+        await supabase.from("products").insert(body);
+        toast.success("🦄 Thêm sản phẩm thành công!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoading(false);
+        handleClose();
+        router.push("/admin/products");
+      } catch (err) {
+        console.log(err);
+        toast.error("🦄 Thêm sản phẩm thất bại!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
 
@@ -376,7 +409,7 @@ function CreateProduct() {
             <Typography
               sx={{
                 "&::after": {
-                  content: `'*'`,
+                  content: `'*[1]'`,
                   color: "red",
                 },
               }}
@@ -404,7 +437,7 @@ function CreateProduct() {
             <Typography
               sx={{
                 "&::after": {
-                  content: `'*'`,
+                  content: `'*[4]'`,
                   color: "red",
                 },
               }}
@@ -428,10 +461,7 @@ function CreateProduct() {
               />
             </Box>
           </Box>
-          <Button
-            variant="contained"
-            onClick={() => fillFullInfo() && handleSave()}
-          >
+          <Button variant="contained" onClick={() => handleSave()}>
             Save
           </Button>
         </Box>

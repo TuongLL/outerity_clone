@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Checkout({ checkoutOrder }) {
   const router = useRouter();
@@ -23,16 +25,14 @@ export default function Checkout({ checkoutOrder }) {
   const [emailValidated, setEmailValidated] = useState(true);
   const validateEmail = () => {
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    setEmailValidated(regex.test(email))
+    setEmailValidated(regex.test(email));
 
     return regex.test(email);
-    // setEmailValidated(() => regex.test(email) && email != "");
   };
   const validatePhone = () => {
     const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-    setPhoneValidated(regex.test(phone))
+    setPhoneValidated(regex.test(phone));
     return regex.test(phone);
-    // setPhoneValidated(() => regex.test(phone) && phone != "");
   };
   const { quantity, size, products } = checkoutOrder;
   const [loading, setLoading] = useState(false);
@@ -40,8 +40,7 @@ export default function Checkout({ checkoutOrder }) {
     e.preventDefault();
     validatePhone();
     validateEmail();
-    if (validatePhone() && validateEmail() ) {
-
+    if (validatePhone() && validateEmail()) {
       const body = {
         checkoutorderid: checkoutOrder.id,
         username: buyerName,
@@ -52,10 +51,29 @@ export default function Checkout({ checkoutOrder }) {
       };
       setLoading(true);
       await supabase.from("orders").insert(body);
-      setTimeout(() => {
-        setLoading(true);
-        router.push('../collections/tee')
-      }, 500);
+      setLoading(false);
+      toast.success("🦄 Đặt hàng thành công!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      router.push("../collections/tee");
+    } else {
+      toast.warning("🦄 Hãy điền đầy đủ thông tin!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
