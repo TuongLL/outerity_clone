@@ -1,4 +1,6 @@
 import DropZone from "@/components/DropZone";
+import { v4 as uuidv4 } from "uuid";
+
 import LoadingComp from "@/components/LoadingComp";
 import { supabase } from "@/lib/supabaseClient";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -26,6 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { isEmpty } from "lodash";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import * as React from "react";
 
 function Row(props) {
@@ -208,6 +211,7 @@ export default function CollapsibleTable({ defaultCollection }) {
 }
 
 function CreateProduct() {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -220,7 +224,7 @@ function CreateProduct() {
     setSubImage([]);
     setOpen(false);
   };
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState("tee");
   const [productName, setProductName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -230,23 +234,26 @@ function CreateProduct() {
   const [subImage, setSubImage] = React.useState([]);
 
   const fillFullInfo = () => {
+    console.log(type, productName, description, price, thumbnail, subImage)
     if (
       type &&
-      productName &&
-      description &&
-      price &&
+      productName != "" &&
+      description != "" &&
+      price != 0 &&
       !isEmpty(thumbnail) &&
       !isEmpty(subImage)
-    )
+    ){
       return true;
+    }
     return false;
   };
 
   const handleSave = async () => {
-    const thumbnailFileName = thumbnail[0].name;
+    const thumbnailFileName = uuidv4() + thumbnail[0].name;
+    console.log(thumbnail[0]);
     const thumbnailFilePath = `images/${thumbnailFileName}`;
     try {
-      setLoading(true)
+      setLoading(true);
       const { data, error } = await supabase.storage
         .from("outerity_store_image")
         .upload(thumbnailFilePath, thumbnail[0]);
@@ -254,7 +261,7 @@ function CreateProduct() {
 
       const publicSubImageUrls = await Promise.all(
         subImage.map(async (file) => {
-          const subImageName = file.name;
+          const subImageName = uuidv4() + file.name ;
           const subImagePath = `images/${subImageName}`;
           const { data, error } = await supabase.storage
             .from("outerity_store_image")
@@ -280,12 +287,12 @@ function CreateProduct() {
       };
 
       await supabase.from("products").insert(body);
-      setLoading(false)
+      setLoading(false);
+      handleClose();
+      router.push("/admin/products");
     } catch (err) {
       console.log(err);
     }
-
-
   };
 
   return (
