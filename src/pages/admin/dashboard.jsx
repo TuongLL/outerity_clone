@@ -23,6 +23,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import DropZone from "@/components/DropZone";
+import { useState } from "react";
 
 function createData(props) {
   return {
@@ -49,7 +51,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.type}
         </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
+        {/* <TableCell align="right">{row.calories}</TableCell> */}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -179,10 +181,6 @@ const rows = [
     description:
       "🔹 Bảng size OuterityS : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55KgM : Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65KgL: Dài : 76.5 Rộng: 57.5 | 1m7 - 1m8, 65Kg - 80Kg👉 Nếu chưa biết lựa size bạn có thể inbox để được chúng mình tư vấn.🔹 Chính sách đổi trả Outerity.– Miễn phí đổi hàng cho khách mua ở Outerity trong trường hợp bị lỗi từ nhà sản xuất, giao nhầm hàng, nhầm size.- Quay video mở sản phẩm khi nhận hàng, nếu không có video unbox, khi phát hiện lỗi phải báo ngay cho Outerity trong 1 ngày tính từ ngày giao hàng thành công. Qua 1 ngày chúng mình không giải quyết khi không có video unbox.– Sản phẩm đổi trong thời gian 3 ngày kể từ ngày nhận hàng– Sản phẩm còn mới nguyên tem, tags, sản phẩm chưa giặt và không dơ bẩn, hư hỏng bởi những tác nhân bên ngoài cửa hàng sau khi mua hàng.👉 Đặc biệt:– Tất cả sản phẩm ver 3.0 sẽ được hỗ trợ trả hàng hoàn tiền trong vòng 05 ngày kể từ ngày nhận hàng nếu có trải nghiệm không tốt, không hài lòng về sản phẩm– Chấp nhận trả hàng hoàn tiền với sản phẩm đã qua sử dụng, không còn nguyên tag tuy nhiên sản phẩm phải còn nguyên vẹn, không bị rách, bung chỉ, bạc màu do quá trình sử dụng🔹Liên hệ: 0862642568/ Web / Outerity.com/ IG / @Outerity.sg/ FB / Outerity",
   }),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
 ];
 
 const style = {
@@ -195,13 +193,13 @@ const style = {
   boxShadow: 24,
   p: 4,
   borderRadius: "12px",
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '24px'
+  display: "flex",
+  flexDirection: "column",
+  gap: "12px",
 };
 export default function CollapsibleTable() {
   return (
-    <Box sx={{ padding: "40px" }}>
+    <Box sx={{ padding: "0 40px" }}>
       <CreateProduct />
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
@@ -229,6 +227,13 @@ function CreateProduct() {
   const handleClose = () => setOpen(false);
 
   const [type, setType] = React.useState("");
+  const [thumbnail, setThumbnail] = React.useState([]);
+  const [subImage, setSubImage] = React.useState([]);
+
+  const handleSave = () => {
+    console.log(thumbnail, subImage)
+  }
+
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -263,25 +268,54 @@ function CreateProduct() {
               <MenuItem value={"polo"}>Polo</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            required
-            id="outlined-required"
-            label="Tên sản phẩm"
-          />
-           <TextField
-            id="outlined-required"
-            label="Mô tả"
-          />
-           <TextField
-            id="outlined-required"
-            label="Giá bán"
-            defaultValue="100000"
-          />
-          <TextField
-            id="outlined-required"
-            label="Discount"
-            defaultValue="50%"
-          />
+          <TextField required id="outlined-required" label="Tên sản phẩm" />
+          <TextField id="outlined-required" label="Mô tả" />
+          <Box
+            sx={{
+              display: "flex",
+              gap: "12px",
+            }}
+          >
+            <TextField
+              id="outlined-required"
+              label="Giá bán"
+              defaultValue="100000"
+            />
+            <TextField
+              id="outlined-required"
+              label="Discount"
+              defaultValue="50%"
+            />
+          </Box>
+          <Box>
+            <Typography>Thumbnail</Typography>
+            <Box
+              sx={{
+                background: "#fafafa",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px dotted #bdbdbd",
+              }}
+            >
+              <DropZone files={thumbnail} setFiles={setThumbnail} maxFiles={1} title="Drag 'n' drop one image file here, or click to select files"/>
+            </Box>
+          </Box>
+          <Box>
+            <Typography>Sub Images</Typography>
+            <Box
+              sx={{
+                background: "#fafafa",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px dotted #bdbdbd",
+              }}
+            >
+              <DropZone files={subImage} setFiles={setSubImage} maxFiles={4} title="Drag 'n' drop 4 image files here, or click to select files"/>
+            </Box>
+          </Box>
+        <Button variant='contained' onClick={handleSave}>Save</Button>
         </Box>
       </Modal>
     </>
