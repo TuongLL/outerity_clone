@@ -1,19 +1,8 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
+import DropZone from "@/components/DropZone";
+import LoadingComp from "@/components/LoadingComp";
+import { supabase } from "@/lib/supabaseClient";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Image from "next/image";
 import {
   Button,
   FormControl,
@@ -21,24 +10,42 @@ import {
   InputLabel,
   MenuItem,
   Modal,
-  OutlinedInput,
   Select,
   TextField,
 } from "@mui/material";
-import DropZone from "@/components/DropZone";
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import { isEmpty } from "lodash";
-
-function createData(props) {
-  return {
-    ...props,
-  };
-}
+import Image from "next/image";
+import * as React from "react";
 
 function Row(props) {
-  const { row } = props;
+  const { collection } = props;
   const [open, setOpen] = React.useState(false);
+  const [quantity, setQuantity] = React.useState(0);
+
+  React.useEffect(() => {
+    console.log(collection);
+    setQuantity(() =>
+      collection.products.reduce(
+        (prev, cur) =>
+          prev +
+          (cur.sizes?.l || 0) +
+          (cur.sizes?.m || 0) +
+          (cur.sizes?.s || 0),
+        0
+      )
+    );
+  });
 
   return (
     <React.Fragment>
@@ -53,14 +60,25 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.type}
+          <Typography
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            {collection.type}
+          </Typography>
         </TableCell>
-        {/* <TableCell align="right">{row.calories}</TableCell> */}
+        <TableCell align="right" component="th" scope="row">
+          {quantity}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Product List
+              </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
@@ -71,14 +89,7 @@ function Row(props) {
                     <TableCell component="th" scope="row" width={300}>
                       Description
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      width={150}
-                      align="right"
-                    >
-                      Amount
-                    </TableCell>
+
                     <TableCell
                       component="th"
                       scope="row"
@@ -98,53 +109,54 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row" width={50}>
-                      <Box>
-                        <Image src={row.image} width={50} height={50} />
-                      </Box>
-                    </TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      width={300}
-                      align="right"
-                    >
-                      <Typography
-                        scope="row"
-                        width={300}
-                        component="div"
-                        noWrap={true}
-                      >
-                        {row.description}
-                      </Typography>
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      width={150}
-                      align="right"
-                    >
-                      {row.amount}
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      width={150}
-                      align="right"
-                    >
-                      {row.price}
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      width={150}
-                      align="right"
-                    >
-                      {row.discount}
-                    </TableCell>
-                  </TableRow>
+                  {collection.products.map((product) => {
+                    return (
+                      <TableRow key={product.id}>
+                        <TableCell component="th" scope="row" width={50}>
+                          <Box>
+                            <Image
+                              src={product.thumbnail}
+                              width={50}
+                              height={50}
+                            />
+                          </Box>
+                        </TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          width={300}
+                          align="right"
+                        >
+                          <Typography
+                            scope="row"
+                            width={300}
+                            component="div"
+                            noWrap={true}
+                          >
+                            {product.description}
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          width={150}
+                          align="right"
+                        >
+                          {product.price}
+                        </TableCell>
+
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          width={150}
+                          align="right"
+                        >
+                          {product.discount}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </Box>
@@ -154,38 +166,6 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
-Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
-
-const rows = [
-  createData({
-    type: "polo",
-    image:
-      "https://product.hstatic.net/200000312481/product/caac735618d7db8982c6_0806a6f9da1045fc93f88b0343bc7f23_grande.jpg",
-    name: "CROSS CUT POLO / Black-Grey Color",
-    price: "275,000₫",
-    path: "cross-cut-polo-black-grey-color",
-    discount: "-18%",
-    description:
-      "🔹 Bảng size OuterityS : Dài 69 Rộng 52.5 | 1m50 - 1m65, 45 - 55KgM : Dài 73 Rộng 55 | 1m60 - 1m75, 50 - 65KgL: Dài : 76.5 Rộng: 57.5 | 1m7 - 1m8, 65Kg - 80Kg👉 Nếu chưa biết lựa size bạn có thể inbox để được chúng mình tư vấn.🔹 Chính sách đổi trả Outerity.– Miễn phí đổi hàng cho khách mua ở Outerity trong trường hợp bị lỗi từ nhà sản xuất, giao nhầm hàng, nhầm size.- Quay video mở sản phẩm khi nhận hàng, nếu không có video unbox, khi phát hiện lỗi phải báo ngay cho Outerity trong 1 ngày tính từ ngày giao hàng thành công. Qua 1 ngày chúng mình không giải quyết khi không có video unbox.– Sản phẩm đổi trong thời gian 3 ngày kể từ ngày nhận hàng– Sản phẩm còn mới nguyên tem, tags, sản phẩm chưa giặt và không dơ bẩn, hư hỏng bởi những tác nhân bên ngoài cửa hàng sau khi mua hàng.👉 Đặc biệt:– Tất cả sản phẩm ver 3.0 sẽ được hỗ trợ trả hàng hoàn tiền trong vòng 05 ngày kể từ ngày nhận hàng nếu có trải nghiệm không tốt, không hài lòng về sản phẩm– Chấp nhận trả hàng hoàn tiền với sản phẩm đã qua sử dụng, không còn nguyên tag tuy nhiên sản phẩm phải còn nguyên vẹn, không bị rách, bung chỉ, bạc màu do quá trình sử dụng🔹Liên hệ: 0862642568/ Web / Outerity.com/ IG / @Outerity.sg/ FB / Outerity",
-  }),
-];
 
 const style = {
   position: "absolute",
@@ -201,7 +181,7 @@ const style = {
   flexDirection: "column",
   gap: "12px",
 };
-export default function CollapsibleTable() {
+export default function CollapsibleTable({ defaultCollection }) {
   return (
     <Box sx={{ padding: "0 40px" }}>
       <CreateProduct />
@@ -209,14 +189,16 @@ export default function CollapsibleTable() {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <TableCell width={50} />
-              <TableCell>Type</TableCell>
-              <TableCell align="right">Amount</TableCell>
+              <TableCell width={"10%"} />
+              <TableCell width={"40%"}>Type</TableCell>
+              <TableCell width={"50%"} align="right">
+                Quantity
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
+            {defaultCollection.map((collection) => (
+              <Row key={collection.type} collection={collection} />
             ))}
           </TableBody>
         </Table>
@@ -238,7 +220,7 @@ function CreateProduct() {
     setSubImage([]);
     setOpen(false);
   };
-
+  const [loading, setLoading] = React.useState(false)
   const [type, setType] = React.useState("tee");
   const [productName, setProductName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -261,22 +243,49 @@ function CreateProduct() {
   };
 
   const handleSave = async () => {
-    console.log("Saved");
-    const fileName = thumbnail[0].name;
-    const filePath = `images/${fileName}`;
-
-    console.log(type, productName, description, price, discount);
-    const { data, error } = await supabase.storage
-      .from("outerity_store_image")
-      .upload(filePath, thumbnail[0]);
-
-    if (error) {
-      console.error(error);
-    } else {
-      const { data: getPublicUrl } = await supabase.storage
+    const thumbnailFileName = thumbnail[0].name;
+    const thumbnailFilePath = `images/${thumbnailFileName}`;
+    try {
+      setLoading(true)
+      const { data, error } = await supabase.storage
         .from("outerity_store_image")
-        .getPublicUrl(filePath);
+        .upload(thumbnailFilePath, thumbnail[0]);
+      const publicThumbnailUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${thumbnailFileName}`;
+
+      const publicSubImageUrls = await Promise.all(
+        subImage.map(async (file) => {
+          const subImageName = file.name;
+          const subImagePath = `images/${subImageName}`;
+          const { data, error } = await supabase.storage
+            .from("outerity_store_image")
+            .upload(subImagePath, file);
+          const publicSubImageUrl = `https://${process.env.NEXT_PUBLIC_PROJECTREF}.supabase.co/storage/v1/object/public/outerity_store_image/images/${subImageName}`;
+          return publicSubImageUrl;
+        })
+      );
+
+      const body = {
+        name: productName,
+        description,
+        discount: discount,
+        price,
+        type,
+        thumbnail: publicThumbnailUrl,
+        subimages: {
+          sub_1: publicSubImageUrls[0],
+          sub_2: publicSubImageUrls[1],
+          sub_3: publicSubImageUrls[2],
+          sub_4: publicSubImageUrls[3],
+        },
+      };
+
+      await supabase.from("products").insert(body);
+      setLoading(false)
+    } catch (err) {
+      console.log(err);
     }
+
+
   };
 
   return (
@@ -420,6 +429,46 @@ function CreateProduct() {
           </Button>
         </Box>
       </Modal>
+      {loading && <LoadingComp />}
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { data } = await supabase.from("products").select(`*`);
+  let defaultCollection = [
+    {
+      type: "polo",
+      products: [],
+    },
+    {
+      type: "tee",
+      products: [],
+    },
+    {
+      type: "croptop",
+      products: [],
+    },
+    {
+      type: "hoodie-sweater",
+      products: [],
+    },
+    {
+      type: "short",
+      products: [],
+    },
+    {
+      type: "tote-bag",
+      products: [],
+    },
+  ];
+  defaultCollection = defaultCollection.map((collection) => {
+    return {
+      type: collection.type,
+      products: data.filter((product) => product.type == collection.type),
+    };
+  });
+  return {
+    props: { defaultCollection: defaultCollection },
+  };
 }

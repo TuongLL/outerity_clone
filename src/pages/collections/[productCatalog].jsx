@@ -6,8 +6,8 @@ import Breadcrumb from "../../components/Breadcrumb";
 import Content from "../../components/Content";
 import { supabase } from "@/lib/supabaseClient";
 import { ContactSupport } from "@mui/icons-material";
+import LoadingComp from "@/components/LoadingComp";
 export default function productCatalog({products}) {
-  console.log(products)
   const router = useRouter();
   const productCatalogType = router.query.productCatalog;
   return (
@@ -20,7 +20,6 @@ export default function productCatalog({products}) {
 
 export async function getServerSideProps(context) {
   const { productCatalog } = context.query;
-  console.log(productCatalog)
   let { data } = await supabase.from('products').select().eq('type', productCatalog)
   return {
     props: {

@@ -6,7 +6,6 @@ import { supabase } from "@/lib/supabaseClient";
 export default function Product({productDetail}) {
   const router = useRouter();
   const product = router.query.product;
-  console.log(productDetail)
   return (
     <>
       <Breadcrumb pathType={product} />
@@ -18,7 +17,6 @@ export default function Product({productDetail}) {
 
 export async function getServerSideProps(context) {
   const { product } = context.query;
-  console.log(product)
   let { data } = await supabase.from('products').select().eq('id', product)
   return {
     props: {

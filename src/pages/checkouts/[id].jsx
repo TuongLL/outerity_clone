@@ -1,3 +1,4 @@
+import LoadingComp from "@/components/LoadingComp";
 import { supabase } from "@/lib/supabaseClient";
 import {
   Box,
@@ -8,9 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Checkout({ checkoutOrder }) {
+  const router = useRouter();
   const [buyerName, setBuyerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -20,20 +23,25 @@ export default function Checkout({ checkoutOrder }) {
   const [emailValidated, setEmailValidated] = useState(true);
   const validateEmail = () => {
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    setEmailValidated(regex.test(email));
+    setEmailValidated(regex.test(email))
+
+    return regex.test(email);
+    // setEmailValidated(() => regex.test(email) && email != "");
   };
   const validatePhone = () => {
     const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-    setPhoneValidated(regex.test(phone));
+    setPhoneValidated(regex.test(phone))
+    return regex.test(phone);
+    // setPhoneValidated(() => regex.test(phone) && phone != "");
   };
   const { quantity, size, products } = checkoutOrder;
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    validateEmail();
     validatePhone();
-    console.log(phoneValidated, emailValidated)
-    if (phoneValidated && emailValidated) {
+    validateEmail();
+    if (validatePhone() && validateEmail() ) {
+
       const body = {
         checkoutorderid: checkoutOrder.id,
         username: buyerName,
@@ -42,7 +50,12 @@ export default function Checkout({ checkoutOrder }) {
         address,
         totalmoney: products.currentprice * quantity,
       };
+      setLoading(true);
       await supabase.from("orders").insert(body);
+      setTimeout(() => {
+        setLoading(true);
+        router.push('../collections/tee')
+      }, 500);
     }
   };
 
@@ -255,6 +268,7 @@ export default function Checkout({ checkoutOrder }) {
           </Typography>
         </Box>
       </Box>
+      {loading && <LoadingComp />}
     </Box>
   );
 }
@@ -265,7 +279,6 @@ export async function getServerSideProps(context) {
     .from("checkoutorders")
     .select(`*, products(thumbnail, name, currentprice)`)
     .eq("id", checkoutOrderId);
-  console.log(data);
   return {
     props: { checkoutOrder: data[0] },
   };

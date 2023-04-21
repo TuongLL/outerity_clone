@@ -7,12 +7,12 @@ import {
   Divider,
   IconButton,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-
+import LoadingComp from "./LoadingComp";
 
 function ProductDetail({ productDetail }) {
   const [heroImg, setHeroImg] = useState(productDetail.thumbnail);
@@ -84,8 +84,9 @@ const ProductDetailInfo = ({
   description,
   id,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const sizes = ["S", "M", "L"];
+  const [loading, setLoading] = useState(false);
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
 
@@ -97,9 +98,15 @@ const ProductDetailInfo = ({
       size: selectedSize,
       productid: id,
     };
-    const {data} = await supabase.from("checkoutorders").insert(body).select();
-    router.push(`../checkouts/${data[0].id}`)
-    
+    setLoading(true);
+    const { data } = await supabase
+      .from("checkoutorders")
+      .insert(body)
+      .select();
+    setTimeout(() => {
+      setLoading(false);
+      router.push(`../checkouts/${data[0].id}`);
+    }, 500);
   };
   return (
     <Box>
@@ -133,7 +140,7 @@ const ProductDetailInfo = ({
             padding: "8px 15px",
           }}
         >
-          {discount}%
+          -{discount}%
         </Typography>
         <Typography
           sx={{
@@ -257,6 +264,7 @@ const ProductDetailInfo = ({
         Mô tả
       </Typography>
       <Typography>{description}</Typography>
+      {loading && <LoadingComp />}
     </Box>
   );
 };

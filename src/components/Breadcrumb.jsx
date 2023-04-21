@@ -26,7 +26,7 @@ function Breadcrumb({ pathType }) {
           <Link
             underline="hover"
             color="inherit"
-            href="/"
+            href="/collections/tee"
             style={{
               textDecoration: "none",
               fontSize: "13px",
@@ -39,7 +39,7 @@ function Breadcrumb({ pathType }) {
             <Link
               underline="hover"
               color="inherit"
-              href="/material-ui/getting-started/installation/"
+              href="/collections/tee"
               style={{
                 textDecoration: "none",
                 fontSize: "13px",
