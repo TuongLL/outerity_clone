@@ -3,7 +3,7 @@ import SideBar from './SideBar'
 import { Box } from '@mui/material'
 import ProductList from './ProductList'
 
-function Content() {
+function Content({products}) {
   return (
     <Box sx={{
         display:'flex',
@@ -11,7 +11,7 @@ function Content() {
         gap: '50px'
     }}>
         <SideBar />
-        <ProductList />
+        <ProductList products={products}/>
     </Box>
   )
 }

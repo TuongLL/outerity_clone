@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 import AddIcon from "@mui/icons-material/Add";
 const sideImgs = [
@@ -19,8 +19,10 @@ const sideImgs = [
   "https://product.hstatic.net/200000312481/product/ato1021_4_669b4be8f6394e359573f09b61dcbcc0_master.jpg",
 ];
 
-function ProductDetail() {
-  const [heroImg, setHeroImg] = useState(sideImgs[0]);
+function ProductDetail({productDetail}) {
+  
+  const [heroImg, setHeroImg] = useState(productDetail.thumbnail);
+  
 
   return (
     <Box
@@ -40,19 +42,19 @@ function ProductDetail() {
             padding: "0 20px",
           }}
         >
-          {sideImgs.map((sideImage, index) => (
+          {Object.values(productDetail.subimages).map((subImage, index) => (
             <Box
               key={index}
               sx={{
-                border: heroImg == sideImage && "1px solid black",
+                border: heroImg == subImage && "1px solid black",
                 marginBottom: "12px",
                 height: "80px",
               }}
             >
               <Image
-                onClick={() => setHeroImg(sideImage)}
+                onClick={() => setHeroImg(subImage)}
                 alt="Alt image"
-                src={sideImage}
+                src={subImage}
                 width={80}
                 height={80}
               />
@@ -69,10 +71,11 @@ function ProductDetail() {
         }}
       >
         <ProductDetailInfo
-          name="Outerity Double Tee Collection - DJ Bear / Whitecap Gray"
-          current_price={"198,000"}
-          discount={"-32%"}
-          origin_price={"290,000"}
+          name={productDetail.name}
+          discount={productDetail.discount}
+          price={productDetail.price}
+          currentprice={productDetail.currentprice}
+          description={productDetail.description}
         />
       </Box>
     </Box>
@@ -93,8 +96,8 @@ const style = {
 const ProductDetailInfo = ({
   name,
   discount,
-  current_price,
-  origin_price,
+  currentprice,
+  price,
   description,
 }) => {
   const sizes = ["S", "M", "L"];
@@ -136,7 +139,7 @@ const ProductDetailInfo = ({
             padding: "8px 15px",
           }}
         >
-          {discount}
+          {discount}%
         </Typography>
         <Typography
           sx={{
@@ -144,7 +147,7 @@ const ProductDetailInfo = ({
             color: "#ff0000",
             fontWeight: "bold",
             "&::after": {
-              content: current_price && `'đ'`,
+              content: currentprice && `'đ'`,
               position: "absolute",
               textDecoration: "underline",
               fontSize: "12px",
@@ -152,7 +155,7 @@ const ProductDetailInfo = ({
             },
           }}
         >
-          {current_price}
+          {currentprice}
         </Typography>
         <Typography
           sx={{
@@ -160,7 +163,7 @@ const ProductDetailInfo = ({
             fontSize: "18px",
             textDecorationLine: "line-through",
             "&::after": {
-              content: origin_price && `'đ'`,
+              content: price && `'đ'`,
               position: "absolute",
               textDecoration: "underline",
               fontSize: "12px",
@@ -169,7 +172,7 @@ const ProductDetailInfo = ({
             },
           }}
         >
-          {origin_price}
+          {price}
         </Typography>
       </Box>
       <Divider

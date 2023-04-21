@@ -174,7 +174,7 @@ const data = [
   },
 ];
 
-function ProductList() {
+function ProductList({products}) {
   const path = useRouter().asPath.split("/");
   const title = path[path.length - 1];
   return (
@@ -200,7 +200,7 @@ function ProductList() {
         spacing={{ xs: 4, md: 6 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {data.map((item,index) => (
+        {products.map((item,index) => (
           <Grid key={index} item xs={2} sm={4} md={3}>
             <ProductCard {...item} />
           </Grid>

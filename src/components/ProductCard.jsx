@@ -12,16 +12,16 @@ import { useRouter } from "next/router";
 import React from "react";
 
 function ProductCard({
-  path,
+  thumbnail,
   name,
-  current_price,
-  origin_price,
-  image,
+  price,
+  currentprice,
+  id,
   discount,
 }) {
   const router = useRouter();
   const handleCardClick = async () => {
-    router.push(`../products/${path}`);
+    router.push(`../products/${id}`);
   };
   return (
     <Card
@@ -29,7 +29,7 @@ function ProductCard({
         boxShadow: "none",
         cursor: "pointer",
         "&::before": {
-          content: discount && `"${discount}"`,
+          content: discount != 0 && `'${discount}%'`,
           position: "absolute",
           background: "white",
           padding: "6px 12px",
@@ -41,7 +41,7 @@ function ProductCard({
       }}
       onClick={handleCardClick}
     >
-      <CardMedia component="img" alt="green iguana" height="100%" src={image} />
+      <CardMedia component="img" alt="green iguana" height="100%" src={thumbnail} />
       <CardContent
         sx={{
           padding: "12px 0",
@@ -77,7 +77,7 @@ function ProductCard({
               },
             }}
           >
-            {current_price}
+            {currentprice}
           </Typography>
           <Typography
             sx={{
@@ -94,7 +94,7 @@ function ProductCard({
               },
             }}
           >
-            {origin_price}
+            {price}
           </Typography>
         </Box>
       </CardContent>

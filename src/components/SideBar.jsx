@@ -106,7 +106,7 @@ function SideBar() {
                   textDecoration: "none",
                   color: "#666",
                 }}
-                href="./phoodie-sweater"
+                href="./hoodie-sweater"
               >
                 hoodie & sweater
               </Link>
