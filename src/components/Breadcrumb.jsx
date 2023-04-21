@@ -26,16 +26,17 @@ function Breadcrumb({ pathType }) {
           <Link
             underline="hover"
             color="inherit"
-            href="/collections/tee"
+            href="./"
             style={{
               textDecoration: "none",
               fontSize: "13px",
               color: "black",
+              textTransform: "uppercase",
             }}
           >
             Trang chủ
           </Link>
-          {pathName.map((path,index) => (
+          {pathName.map((path, index) => (
             <Link
               underline="hover"
               color="inherit"
@@ -44,6 +45,7 @@ function Breadcrumb({ pathType }) {
                 textDecoration: "none",
                 fontSize: "13px",
                 color: "black",
+                textTransform: "uppercase",
               }}
               key={index}
             >
