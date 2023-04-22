@@ -1,83 +1,69 @@
-# Probook App | A Social Media App
+# Outerity App | E-commerce Web App
+In this project, we will build a full-stack e-commerce web application using the Next.js framework, Material UI for styling, and Supabase as the backend. The application will have the following features:
+* Product catalog with search and filter functionality
+* Product details page
+* Shopping cart and checkout process
+* Order history and status tracking
 
-![Logo](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739721/probook/Probook_kybzoe.png)
+## Demo
+* _Check out the live demo of my e-commerce web application:_ [https://outerity-clone.vercel.app/](https://outerity-clone.vercel.app/)
 
-An social media platform built using ReactJS, Redux Toolkit,Material UI, Node, Express, MongoDB, JWT and Mongoose.
-
-## Tech Stack
-
-**Client:** React, Redux, Material UI and React Router.
-
-**Server:** Node, Express, MongoDB, Mongoose and JWT.
 
 ## Screenshots
 
-![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739754/probook/Screenshot_76_e1cack.png)
+### Product Catalog
+![App Screenshot](https://github.com/TuongLL/outerity_clone/blob/main/assets/catalog.jpg)
+### Product Detail
+![App Screenshot](https://github.com/TuongLL/outerity_clone/blob/main/assets/detail.jpg)
+### Checkout
+![App Screenshot](https://github.com/TuongLL/outerity_clone/blob/main/assets/checkout.jpg)
+### Admin Product
+![App Screenshot](https://github.com/TuongLL/outerity_clone/blob/main/assets/admin_product.jpg)
+### Admin Order
+![App Screenshot](https://github.com/TuongLL/outerity_clone/blob/main/assets/admin_order.jpg)
 
-![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739752/probook/Screenshot_74_snfvxa.png)
+## Getting Started
 
-![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739753/probook/Screenshot_77_c2vowm.png)
+_Welcome to our e-commerce web application built with Next.js, Material UI, and Supabase! This application provides a seamless user experience for both customers and administrators, including a product catalog with search and filter functionality, product detail, shopping cart and checkout process, and order history and status tracking._
 
-## Demo
+### Prerequisites
 
-Live app link:
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-## Run Locally
+### Installation
 
-Clone the project
+_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+
+1. Get a free API Key at [https://supabase.com](https://supabase.com)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/TuongLL/outerity_clone
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Enter your API in `.env` file
+   ```env
+   NEXT_PUBLIC_PROJECTREF  = 'ENTER YOUR PROJECT KEY'
+   NEXT_PUBLIC_SUPABASE_KEY  = 'ENTER YOUR SUPASBASE KEY'
+   ```
+
+### Start react app
 
 ```bash
-  git clone https://github.com/wasifbaliyan/probook-client.git
-```
-
-Go to the project directory
-
-```bash
-  cd probook-client
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start react app
-
-```bash
-  npm start
+  npm run dev
 ```
 
 ## Authors
 
-- [@wasifbaliyan](https://www.github.com/wasifbaliyan)
+- [@TuongLL](https://www.github.com/TuongLL)
 
-## 🚀 About Me
-
-I'm a full stack Javascript Developer. I Love to build beautiful and scalable web apps.
-
-## 🔗 Links
-
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://wasifbaliyan.com/)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/wasifbaliyan)
-[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/wasifbaliyan)
-
-## Badges
-
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-
-## Roadmap
-
-- Search feature
-
-- Toast notifications
-
-- bookmarks
-
-## Support
-
-For support, email hello@wasifbaliyan.com
 
 ## Feedback
 
-If you have any feedback, please reach out to me at hello@wasifbaliyan.com
+If you have any feedback, please reach out to me at lamtuong2012392@gmail.com
