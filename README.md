@@ -1,38 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Probook App | A Social Media App
 
-## Getting Started
+![Logo](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739721/probook/Probook_kybzoe.png)
 
-First, run the development server:
+An social media platform built using ReactJS, Redux Toolkit,Material UI, Node, Express, MongoDB, JWT and Mongoose.
+
+## Tech Stack
+
+**Client:** React, Redux, Material UI and React Router.
+
+**Server:** Node, Express, MongoDB, Mongoose and JWT.
+
+## Screenshots
+
+![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739754/probook/Screenshot_76_e1cack.png)
+
+![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739752/probook/Screenshot_74_snfvxa.png)
+
+![App Screenshot](https://res.cloudinary.com/dnboldv5r/image/upload/v1633739753/probook/Screenshot_77_c2vowm.png)
+
+## Demo
+
+Live app link:
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+  git clone https://github.com/wasifbaliyan/probook-client.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+  cd probook-client
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Install dependencies
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+  npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Start react app
 
-## Learn More
+```bash
+  npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Authors
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [@wasifbaliyan](https://www.github.com/wasifbaliyan)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 🚀 About Me
 
-## Deploy on Vercel
+I'm a full stack Javascript Developer. I Love to build beautiful and scalable web apps.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔗 Links
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://wasifbaliyan.com/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/wasifbaliyan)
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/wasifbaliyan)
+
+## Badges
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+
+## Roadmap
+
+- Search feature
+
+- Toast notifications
+
+- bookmarks
+
+## Support
+
+For support, email hello@wasifbaliyan.com
+
+## Feedback
+
+If you have any feedback, please reach out to me at hello@wasifbaliyan.com
